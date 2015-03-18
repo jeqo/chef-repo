@@ -1,0 +1,6 @@
+{
+  "name": "jeqo-linux",
+  "description": "Install some stuff",
+  "override_attributes": {
+  }
+}
