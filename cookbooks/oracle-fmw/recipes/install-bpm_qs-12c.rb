@@ -11,6 +11,7 @@ unzip_command = "unzip -o #{installer_zip}"
 
 remote_file installer_zip do
 	source node['bpm_qs-12c']['url']
+	checksum node['bpm_qs-12c']['checksum']
 	action :create
 end
 
