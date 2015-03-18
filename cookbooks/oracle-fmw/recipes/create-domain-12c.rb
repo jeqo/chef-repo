@@ -8,6 +8,7 @@ wl_home = "#{mw_home}/wlserver"
 common_home = "#{mw_home}/oracle_common"
 osb_home = "#{mw_home}/osb"
 soa_home = "#{mw_home}/soa"
+java_home = node['java']['java_home']
 
 template create_domain_py do
 	source "domain-12c.py.erb"
