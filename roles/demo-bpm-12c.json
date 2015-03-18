@@ -1,0 +1,63 @@
+{
+	"name" : "demo-bpm-12c",
+	"json_class" : "Chef::Role",
+	"default_attributes" : {
+		"domain-12c": {
+			"name": "demo-bpm-domain",
+			"mode": "Compact",
+			"apps": [
+				{"name" : "SOA", "enabled" : true},
+				{"name" : "BPM", "enabled" : true},
+				{"name" : "BAM", "enabled" : false},
+				{"name" : "OSB", "enabled" : false}
+			],
+			"machines": [
+			],
+			"admin_server": {
+				"base_name" : "AdminServer",
+				"new_name" : "bpm-server",
+				"port" : "7001"
+			},
+			"managed_servers": [
+			],
+			"db_repo_host": "localhost",
+			"db_repo_port": "1521",
+			"db_repo_sid": "xe",
+			"db_repo_prefix": "DEMO",
+			"db_repo_password": "welcome1"
+		},
+		"rcu-12c": {
+			"db_schema_prefix": "DEMO",
+			"db_dba_user": "SYS",
+			"db_dba_role": "SYSDBA",
+			"db_dba_password": "welcome1",
+			"db_schemas_password": "welcome1",
+			"db_hostname": "localhost",
+			"db_port": "1521",
+			"db_service": "xe",
+			"components": [
+				"SOAINFRA",
+				"OPSS",
+				"IAU",
+				"MDS",
+				"WLS",
+				"UCSUMS",
+				"IAU_APPEND",
+				"IAU_VIEWER"
+			]
+		},
+		"oracle-xe": {
+			"url": "file:///data/oracle-xe/Disk1/oracle-xe-11.2.0-1.0.x86_64.rpm",
+			"tnslsnr-port": 1521,
+			"http-port": 8079,
+			"oracle-password": "welcome1",
+			"start-lsnr-on-boot": true
+		}
+	},
+	"run_list" : [
+		"recipe[oracle-fmw::install-bpm_qs-12c]",
+		"recipe[oracle-xe]",
+		"recipe[oracle-fmw::create-rcu_repository-12c]",
+		"recipe[oracle-fmw::create-domain-12c]"
+	]
+}
