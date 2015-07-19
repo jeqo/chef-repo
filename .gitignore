@@ -4,3 +4,6 @@
 cache
 # Data Files
 data
+# VirtualBox Disks
+disks
+*.vdi
