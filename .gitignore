@@ -1,0 +1,6 @@
+# Vagrant Files
+.vagrant
+# Cache Files
+cache
+# Data Files
+data
