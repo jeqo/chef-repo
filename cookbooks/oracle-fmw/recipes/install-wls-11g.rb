@@ -3,9 +3,7 @@ include_recipe "oracle-fmw::prepare-environment-11g"
 os_user = node['fmw-11g']['os_user']
 os_group = node['fmw-11g']['os_installer_group']
 
-###
 # Getting the installer
-###
 installer_jar = File.join(Chef::Config[:file_cache_path], node['wls-11g']['installer_file'])
 
 remote_file installer_jar do
@@ -15,9 +13,7 @@ remote_file installer_jar do
 end
 
 
-###
 # Define Response File
-###
 response_file = File.join(Chef::Config[:file_cache_path], "install_wls-11g.rsp")
 mw_home = "#{node['fmw-11g']['home']}"
 wls_home = "#{node['fmw-11g']['home']}/#{node['wls-11g']['home_directory']}"
@@ -30,9 +26,7 @@ template response_file do
     })
 end
 
-###
 # Run Installer
-###
 install_command = "java -jar #{installer_jar} -mode=silent -silent_xml=#{response_file}"
 
 execute install_command do

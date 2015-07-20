@@ -3,10 +3,7 @@ include_recipe "oracle-fmw::prepare-environment-11g"
 os_user = node['fmw-11g']['os_user']
 os_group = node['fmw-11g']['os_installer_group']
 
-
-###
 # Prepare Template
-###
 create_domain_py = "#{Chef::Config[:file_cache_path]}/create_domain.py"
 
 wl_home = "#{node['fmw-11g']['home']}/#{node['wls-11g']['home_directory']}"
@@ -40,9 +37,7 @@ template create_domain_py do
 	})
 end
 
-###
 # Create directories
-###
 directory node['domain-11g']['domains_path'] do
 	owner os_user
 	group os_group
@@ -57,9 +52,7 @@ directory node['domain-11g']['apps_path'] do
 	action :create
 end
 
-###
 # Run WLST scripts
-###
 domain_home = "#{node['domain-11g']['domains_path']}/#{node['domain-11g']['name']}"
 
 domain_config_file = "#{domain_home}/config/config.xml"
@@ -72,9 +65,7 @@ execute wlst_exec do
 	action :run
 end
 
-###
 # Upstart script
-###
 start_nm_script = "/etc/init/nodemanager.conf"
 
 template start_nm_script do
@@ -95,9 +86,7 @@ template start_admin_server_script do
 	})
 end
 
-###
 # Node Manager Properties file
-###
 nm_props = "#{wl_home}/common/nodemanager/nodemanager.properties"
 
 template nm_props do
@@ -105,5 +94,15 @@ template nm_props do
 	variables({
 		:wls_home => wl_home,
 		:java_home => java_home
+	})
+end
+
+# Fix Start Admin Server - Debug option
+start_wls = "#{domain_home}/startWebLogic.sh"
+
+template start_wls do
+	source "startWebLogic-11g.sh.erb"
+	variables({
+		:domain_home => domain_home
 	})
 end

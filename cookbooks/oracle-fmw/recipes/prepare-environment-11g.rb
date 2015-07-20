@@ -1,8 +1,6 @@
 include_recipe "java"
 
-###
 # User and group creation
-###
 os_user = node['fmw-11g']['os_user']
 os_installer_group = node['fmw-11g']['os_installer_group']
 
@@ -22,9 +20,7 @@ user os_user do
   password "$1$rUhN5PYi$2rQAEEuOBScZOKsMRpHDe0"
 end
 
-###
 # Increase user limits
-###
 soft_limits = "#{os_user}	soft    nofile    #{node['fmw-11g']['soft_nofile']}"
 hard_limits = "#{os_user}	hard    nofile    #{node['fmw-11g']['hard_nofile']}"
 limits_file = "/etc/security/limits.conf"
@@ -52,9 +48,7 @@ execute run_reset do
   action :run
 end
 
-###
 # Install packages
-###
 node['fmw-11g']['packages'].each do |package|
   package_title = "#{package['name']}.#{package['arch']}"
 
@@ -62,9 +56,7 @@ node['fmw-11g']['packages'].each do |package|
   end
 end
 
-###
 # Create FMW Directories
-###
 directory node['fmw-11g']['home'] do
   owner os_user
   group os_installer_group
@@ -72,9 +64,7 @@ directory node['fmw-11g']['home'] do
   action :create
 end
 
-###
 # Create OraInventory template
-###
 ora_inventory_directory = "#{node['fmw-11g']['orainventory_directory']}"
 ora_inventory_file = "#{node['fmw-11g']['orainventory_file']}"
 

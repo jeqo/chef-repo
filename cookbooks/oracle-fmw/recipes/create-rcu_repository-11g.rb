@@ -1,6 +1,4 @@
-###
 # Get installer
-###
 installer_zip = File.join(Chef::Config[:file_cache_path], node['rcu-11g']['installer_zip'])
 
 remote_file installer_zip do
@@ -9,9 +7,7 @@ remote_file installer_zip do
 	action :create
 end
 
-###
 # Unzip wizard
-###
 rcu = "#{Chef::Config[:file_cache_path]}/rcuHome/bin/rcu"
 unzip_command = "unzip -o #{installer_zip}"
 
@@ -21,9 +17,7 @@ execute unzip_command do
   creates rcu
 end
 
-###
 # Create Password File
-###
 password_file = File.join(Chef::Config[:file_cache_path], "rcu_password_file-11g.txt")
 
 template password_file do
@@ -35,9 +29,7 @@ template password_file do
   })
 end
 
-###
 # Run Wizard
-###
 connectString = "#{node['rcu-11g']['db_hostname']}:#{node['rcu-11g']['db_port']}:#{node['rcu-11g']['db_service']}"
 
 components = ""
@@ -69,9 +61,7 @@ execute rcu_create_command do
   returns create_returns
 end
 
-###
 # Remove Password File
-###
 template password_file do
   action :delete
 end

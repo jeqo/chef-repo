@@ -1,0 +1,92 @@
+{
+	"name" : "demo-osb-11g",
+	"json_class" : "Chef::Role",
+	"default_attributes" : {
+    "fmw-11g": {
+      "os_user": "oraclefmw",
+      "os_installer_group": "oinstall",
+      "os_timezone": "Europe/Oslo",
+      "home": "/home/oraclefmw/fmw/11.1"
+    },
+    "wls-11g": {
+      "url": "file:///data/wls1036_generic.jar",
+      "home_directory": "wlserver"
+    },
+		"osb-11g": {
+			"url": "file:///data/ofm_osb_generic_11.1.1.7.0_disk1_1of1.zip",
+      "home_directory": "osb"
+		},
+		"rcu-11g": {
+			"url": "file:///data/ofm_rcu_linux_11.1.1.7.0_64_disk1_1of1.zip",
+			"db_schema_prefix": "DEV",
+			"db_dba_user": "SYS",
+			"db_dba_role": "SYSDBA",
+			"db_dba_password": "welcome1",
+			"db_schemas_password": "welcome1",
+			"db_hostname": "localhost",
+			"db_port": 1521,
+			"db_service": "xe",
+			"components": [
+			  "SOAINFRA",
+			  "MDS",
+			  "ORASDPM"
+			],
+			"keep_existing_schema": true
+		},
+		"oracle-xe": {
+			"url": "file:///data/oracle-xe-11.2.0-1.0.x86_64.rpm",
+			"tnslsnr-port": 1521,
+			"http-port": 8079,
+			"oracle-password": "welcome1",
+			"start-lsnr-on-boot": true
+		},
+		"domain-11g": {
+			"name": "demo-osb-domain",
+			"domains_path": "/home/oraclefmw/work/domains",
+			"apps_path": "/home/oraclefmw/work/apps",
+			"start_mode": "dev",
+			"admin_username": "weblogic",
+			"admin_password": "welcome1",
+			"apps": [
+				{"name" : "SOA", "enabled" : false},
+				{"name" : "SOA_DEV", "enabled" : false},
+				{"name" : "EM", "enabled" : true},
+				{"name" : "BAM", "enabled" : false},
+				{"name" : "OSB", "enabled" : true},
+				{"name" : "OSB_DEV", "enabled" : false}
+			],
+			"machines": [
+				{
+					"name": "LocalMachine",
+					"nm_address": "localhost",
+					"nm_port": "5556",
+					"nm_type": "Plain"
+				}
+			],
+			"admin_server": {
+				"base_name" : "AdminServer",
+				"new_name" : "admin-server",
+				"port" : "7001"
+			},
+			"managed_servers": [
+				{
+					"base_name": "osb_server1",
+					"new_name": "osb-server-1",
+					"port": "7021",
+					"machine_name": "LocalMachine"
+				}
+			],
+			"db_repo_host": "localhost",
+			"db_repo_port": "1521",
+			"db_repo_sid": "xe",
+			"db_repo_prefix": "DEV",
+			"db_repo_password": "welcome1"
+		}
+	},
+	"run_list" : [
+		"recipe[oracle-fmw::install-osb-11g]",
+		"recipe[oracle-xe]",
+		"recipe[oracle-fmw::create-rcu_repository-11g]",
+		"recipe[oracle-fmw::create-domain-11g]"
+	]
+}

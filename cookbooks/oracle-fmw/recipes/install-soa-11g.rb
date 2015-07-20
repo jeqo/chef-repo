@@ -3,9 +3,7 @@ include_recipe "oracle-fmw::install-wls-11g"
 os_user = node['fmw-11g']['os_user']
 os_group = node['fmw-11g']['os_installer_group']
 
-###
 # Get installer
-###
 installer_directory = "#{Chef::Config[:file_cache_path]}/soa-11g"
 
 directory installer_directory do
@@ -27,9 +25,7 @@ remote_file installer_zip_2 do
 	action :create
 end
 
-###
 # Unzip installers
-###
 runInstaller = "#{installer_directory}/Disk1/runInstaller"
 
 unzip1_command = "unzip -o #{installer_zip_1}"
@@ -48,9 +44,7 @@ execute unzip2_command do
   creates "#{installer_directory}/Disk4"
 end
 
-###
 # Create Response File
-###
 oracle_soa_response = "#{installer_directory}/soa_install-11g.rsp"
 mw_home = node['fmw-11g']['home']
 soa_home = "#{node['fmw-11g']['home']}/#{node['soa-11g']['home_directory']}"
@@ -63,9 +57,7 @@ template oracle_soa_response do
 	})
 end
 
-###
 # Run Installer
-###
 java_home = node['java']['java_home']
 install_command = "#{runInstaller} -jreLoc #{java_home} -silent -responseFile #{oracle_soa_response} -debug -waitforcompletion -invPtrLoc #{node['fmw-11g']['orainventory_file']}"
 run_command = "su -l #{os_user} -c '#{install_command}'"

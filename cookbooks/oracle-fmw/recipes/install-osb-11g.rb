@@ -3,9 +3,7 @@ include_recipe "oracle-fmw::install-wls-11g"
 os_user = node['fmw-11g']['os_user']
 os_group = node['fmw-11g']['os_installer_group']
 
-###
 # Get installer
-###
 installer_directory = "#{Chef::Config[:file_cache_path]}/osb-11g"
 
 directory installer_directory do
@@ -21,9 +19,7 @@ remote_file installer_zip do
 end
 
 
-###
 # Unzip installers
-###
 unzip_command = "unzip -o #{installer_zip}"
 runInstaller = "#{installer_directory}/Disk1/runInstaller"
 
@@ -33,9 +29,7 @@ execute unzip_command do
   creates runInstaller
 end
 
-###
 # Create Response File
-###
 oracle_osb_response = File.join(installer_directory, "osb_install-11g.rsp")
 osb_installation_option = node['osb-11g']['installation_option']
 mw_home = node['fmw-11g']['home']
@@ -66,9 +60,7 @@ when "CUSTOM"
 else
 end
 
-###
 # Run Installer
-###
 java_home = node['java']['java_home']
 install_command = "#{runInstaller} -jreLoc #{java_home} -silent -responseFile #{oracle_osb_response} -debug -waitforcompletion -invPtrLoc #{node['fmw-11g']['orainventory_file']}"
 
